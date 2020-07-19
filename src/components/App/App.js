@@ -158,7 +158,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Ja<span className="highlight">mmm</span>ing</h1>
+        <h1>Spot<span className="highlight">i</span>tube</h1>
           <div className="App">
             <SearchBar 
             onSearch={this.search} 
@@ -176,7 +176,6 @@ class App extends React.Component {
               onNameChange={this.updatePlaylistName}
               onSave={this.savePlaylist}
               />
-}
             </div>
           </div>
       </div>
