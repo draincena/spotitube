@@ -34,8 +34,6 @@ const Youtube = {
     //   }, 3000
     // )
 
-
-
     return new Promise((resolve, reject) => {
       let musicTitles = []
       gapi.client.youtube.channels.list({
@@ -46,7 +44,7 @@ const Youtube = {
         gapi.client.youtube.playlistItems.list({
           "part": "snippet",
           "playlistId": likedId,
-          "maxResults": 5
+          "maxResults": 20
           // Change to max: 30
         }).then(
           response => {
@@ -80,7 +78,6 @@ const Youtube = {
                     }
                   }
                 )
-                console.log(musicTitles)
                 resolve(musicTitles)
               }
             )

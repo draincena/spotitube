@@ -1,0 +1,26 @@
+.YoutubeButtons button {
+    cursor: pointer;
+    padding: .77rem 0;
+    border-radius: 54px;
+    background-color: #010c3f;
+    text-align: center;
+    font-size: .833rem;
+    transition: background-color .25s;
+    border: 0px;
+    color: #fff;
+    font-weight: 500;
+    margin: 0.2rem 1rem;
+    text-transform: uppercase;
+}
+
+.YoutubeButtons button:hover {
+    background-color: rgba(108, 65, 233, .7);
+}
+
+.YoutubeButtons {
+    width: 240px;
+}
+
+button {
+    width: 200px;
+}

@@ -3,6 +3,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar'
 import SearchResults from '../SearchResults/SearchResults'
 import Playlist from '../Playlist/Playlist'
+import YoutubeButtons from '../YoutubeButtons/YoutubeButtons'
 import Spotify from '../../util/Spotify'
 import Youtube from '../../util/Youtube'
 
@@ -13,7 +14,7 @@ class App extends React.Component {
     this.state = {
       searchResults: [],
       playlist: {
-        playlistName: "New Playlist",
+        playlistName: "Playlist Name",
         playlistTracks: []
       },
       accessToken: ""
@@ -88,7 +89,7 @@ class App extends React.Component {
         this.setState(
           {
             playlist: {
-              playlistName: "New Playlist",
+              playlistName: "Playlist Name",
               playlistTracks: []
             }
           }
@@ -127,35 +128,28 @@ class App extends React.Component {
 
   async importYoutubePreferences() {
     let importedPlaylist = []
-    // Not properly awaiting response from findTitles
-
-    console.log(await Youtube.findTitles())
-
     const youtubeTitles = await Youtube.findTitles()
-    console.log(youtubeTitles)
+    let promiseArray = []
     youtubeTitles.forEach(
       title => {
-        Spotify.search(title, this.state.accessToken).then(
+        promiseArray.push(
+          new Promise((resolve, reject) => {
+            resolve(Spotify.search(title))
+          })
+        )
+      }
+    )
+    await Promise.all(promiseArray).then(
+      queries => {
+        queries.forEach(
           tracks => {
             if (tracks.length > 0) {
               importedPlaylist.push(tracks[0])
             }
           }
         )
-      },
+      }
     )
-
-    // youtubeTitles.forEach(
-    //   title => {
-    //     Spotify.search(title, this.state.accessToken).then(
-    //       tracks => {
-    //         if (tracks.length > 0) {
-    //           importedPlaylist.push(tracks[0])
-    //         }
-    //       }
-    //     )
-    //   }
-    // )
     this.setState(
       {
         playlist: {
@@ -172,20 +166,22 @@ class App extends React.Component {
         <h1>Spot<span className="highlight">i</span>tube</h1>
           <div className="App">
             <SearchBar 
-            onSearch={this.search} 
+              onSearch={this.search} 
             />
             <div className="App-playlist">
               <SearchResults 
                 searchResults={this.state.searchResults} 
                 onAdd={this.addTrack}
               />
-              <button onClick={this.authorizeGoogle}>authorize and load</button>
-              <button onClick={this.importYoutubePreferences}>Import Music Preferences From Youtube</button> 
+              <YoutubeButtons
+                onAuthorize={this.authorizeGoogle}
+                onImport={this.importYoutubePreferences}
+              />
               <Playlist 
-              playlist={this.state.playlist}
-              onRemove={this.removeTrack}
-              onNameChange={this.updatePlaylistName}
-              onSave={this.savePlaylist}
+                playlist={this.state.playlist}
+                onRemove={this.removeTrack}
+                onNameChange={this.updatePlaylistName}
+                onSave={this.savePlaylist}
               />
             </div>
           </div>

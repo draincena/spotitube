@@ -25,17 +25,10 @@ const Spotify = {
         }
     },
 
-    search(query, accessToken) {
-        let token
-        if (accessToken) {
-            token = accessToken
-        } else {
-            token = Spotify.getAccessToken()
-        }
-        console.log(`https://api.spotify.com/v1/search?type=track&q=${query}`)
+    async search(query, accessToken) {
         return fetch(`https://api.spotify.com/v1/search?type=track&q=${query}`, {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${Spotify.getAccessToken()}`
             }
         }).then(
             response => {
