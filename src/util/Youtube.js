@@ -21,57 +21,74 @@ const Youtube = {
   },
 
   findTitles() {
-    let musicTitles = []
-    setTimeout(
-      () => {
-        return ["hello"]
-      }, 3000
-    )
-  //   gapi.client.youtube.channels.list({
-  //     "part": "contentDetails",
-  //     "mine": true
-  //   }).then(function(response) {
-  //     const likedId = response.result["items"][0]["contentDetails"]["relatedPlaylists"]["likes"]
-  //     gapi.client.youtube.playlistItems.list({
-  //       "part": "snippet",
-  //       "playlistId": likedId,
-  //       "maxResults": 5
-  //       // Change to max: 30
-  //     }).then(
-  //       response => {
-  //         const likedVideos = response.result["items"]
-  //         const likedVideoIds = likedVideos.map(
-  //           videoId => {
-  //             return videoId["snippet"]["resourceId"]["videoId"]
-  //           }
-  //         )
-  //         async function asyncCall() {
-  //           await function() {
-  //             likedVideoIds.forEach(
-  //               videoId => {
-  //                 gapi.client.youtube.videos.list({
-  //                   "part": "snippet",
-  //                   "id": videoId
-  //                 }).then(
-  //                   response => {
-  //                     if (response.result["items"][0]["snippet"]["categoryId"] === "10") {
-  //                       musicTitles.push(String(response.result["items"][0]["snippet"]["title"]))
-  //                     }
-  //                   }
-  //                 )
-  //               }
-  //             )
-  //           };
-  //           return musicTitles;
-  //         }
-  //         // return asyncCall()
-  //         return []
-  //       }
-  //     )
-  //   },
+    // return new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     resolve(["hello"])
+    //   }, 3000)
+    // })
 
-  //   function(err) { console.error("Execute error", err); })
+    // let musicTitles = []
+    // setTimeout(
+    //   () => {
+    //     return ["hello"]
+    //   }, 3000
+    // )
 
+
+
+    return new Promise((resolve, reject) => {
+      let musicTitles = []
+      gapi.client.youtube.channels.list({
+        "part": "contentDetails",
+        "mine": true
+      }).then(function(response) {
+        const likedId = response.result["items"][0]["contentDetails"]["relatedPlaylists"]["likes"]
+        gapi.client.youtube.playlistItems.list({
+          "part": "snippet",
+          "playlistId": likedId,
+          "maxResults": 5
+          // Change to max: 30
+        }).then(
+          response => {
+            const likedVideos = response.result["items"]
+            const likedVideoIds = likedVideos.map(
+              videoId => {
+                return videoId["snippet"]["resourceId"]["videoId"]
+              }
+            )
+            let promiseArray = []
+            likedVideoIds.forEach(
+              videoId => {
+                promiseArray.push(
+                  new Promise((resolve, reject) => {
+                    resolve(
+                      gapi.client.youtube.videos.list({
+                        "part": "snippet",
+                        "id": videoId
+                      })
+                    )
+                  })
+                )
+              }
+            )
+            Promise.all(promiseArray).then(
+              values => {
+                values.forEach(
+                  response => {
+                    if (response.result["items"][0]["snippet"]["categoryId"] === "10") {
+                      musicTitles.push(String(response.result["items"][0]["snippet"]["title"]))
+                    }
+                  }
+                )
+                console.log(musicTitles)
+                resolve(musicTitles)
+              }
+            )
+          }
+        )
+      },
+      function(err) { console.error("Execute error", err); })
+    })
   },
 }
 

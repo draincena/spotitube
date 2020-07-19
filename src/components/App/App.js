@@ -126,14 +126,13 @@ class App extends React.Component {
   }
 
   async importYoutubePreferences() {
-    let youtubeTitles = []
     let importedPlaylist = []
     // Not properly awaiting response from findTitles
 
     console.log(await Youtube.findTitles())
 
-    youtubeTitles = await Youtube.findTitles()
-    console.log(await youtubeTitles)
+    const youtubeTitles = await Youtube.findTitles()
+    console.log(youtubeTitles)
     youtubeTitles.forEach(
       title => {
         Spotify.search(title, this.state.accessToken).then(
@@ -143,8 +142,20 @@ class App extends React.Component {
             }
           }
         )
-      }
+      },
     )
+
+    // youtubeTitles.forEach(
+    //   title => {
+    //     Spotify.search(title, this.state.accessToken).then(
+    //       tracks => {
+    //         if (tracks.length > 0) {
+    //           importedPlaylist.push(tracks[0])
+    //         }
+    //       }
+    //     )
+    //   }
+    // )
     this.setState(
       {
         playlist: {
