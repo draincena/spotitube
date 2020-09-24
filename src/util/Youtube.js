@@ -1,7 +1,7 @@
 import gapi from "./GoogleApi"
 
 gapi.load("client:auth2", function() {
-  gapi.auth2.init({client_id: "88350370043-s2f8s01g7rm32oagm2ld6l283coa1ru5.apps.googleusercontent.com"});
+  gapi.auth2.init({client_id: "CLIENT_ID"});
 });
 
 const Youtube = {
@@ -14,7 +14,7 @@ const Youtube = {
   },
 
   loadClient() {
-    gapi.client.setApiKey("AIzaSyBUhxhxj4usFzH_yP-py1kfzs1aZ6jg31s");
+    gapi.client.setApiKey("API_KEY");
     return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
         .then(function() { console.log("GAPI client loaded for API"); },
               function(err) { console.error("Error loading GAPI client for API", err); });
