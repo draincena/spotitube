@@ -1,4 +1,4 @@
-const clientID = "d4d7f598a5484e4dbe9a51d68a3acf9e"
+const clientID = "CLIENT_ID"
 // const redirect_uri = "http://ligmajammingapp.surge.sh/"
 const redirect_uri = "http://localhost:3000/"
 let accessToken
